@@ -14,6 +14,7 @@ sumar = lambda n1 ,n2 : n1 + n2
 #print( sumar(5, 5) )
 
 def fabricar_funcion(operador:  str):
+#Inicializar la 'operación' con una funcion por defecto para evitar else
     operacion = lambda n1,n2: f'No existe operación para {n1} {operador} {n2}'
 #Se aprovechó para reducir lineas
 #No se dejó espacio en los condicionales
