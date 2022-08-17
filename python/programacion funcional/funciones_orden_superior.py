@@ -20,8 +20,8 @@ def fabricar_operacion(operador):
     return respuesta
 
 def funcion_orden_superior(funcion):
-    resultado = funcion(10, 20)
+    resultado = funcion(10, 20) #llamado de función pues le da valores
     print('El resultado es  =>', resultado)
 
-operacion = fabricar_operacion('+')
+operacion = fabricar_operacion('+') #Asignación
 funcion_orden_superior(operacion)

@@ -53,7 +53,7 @@ print("--SOLUCION PUNTO 4--")
 def orden_superior(funcion, lista):
     lista_nueva = []
     for i in lista:
-        valor = funcion(i)
+        valor = funcion(i) #Ejemplo de asignación
         lista_nueva.append(valor)
     return lista_nueva
 
