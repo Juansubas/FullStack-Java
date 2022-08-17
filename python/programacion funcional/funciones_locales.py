@@ -1,3 +1,5 @@
+#Son funciones dentro de otra función, la cual solo se puede acceder estando dentro de la función contenedora
+
 def calcular_promedios(numeros: list):
 
     #Función local

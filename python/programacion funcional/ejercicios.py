@@ -49,4 +49,16 @@ print("--------------------\n")
 #El punto 4
 print("--SOLUCION PUNTO 4--")
 
+
+def orden_superior(funcion, lista):
+    lista_nueva = []
+    for i in lista:
+        valor = funcion(i)
+        lista_nueva.append(valor)
+    return lista_nueva
+
+funcion= lambda i: i*i
+
+print(orden_superior(funcion , [2, 4, 6]))
+
 print("--------------------\n")

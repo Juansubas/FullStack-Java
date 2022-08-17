@@ -1,3 +1,9 @@
+#Son funciones que reciben como parámetros otras funciones
+#Mediante referencias a funciones, queda mejor para organizarlo.
+#Se realiza una función la cual retornará otra función, con esto 
+#tenemos luego una función de orden superior la cual tomará esa función y la procesará de acuerdo
+#a los parámetros dados.
+
 def fabricar_operacion(operador):
     respuesta = ''
 
