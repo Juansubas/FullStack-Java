@@ -6,12 +6,14 @@ rutaFileCsv = 'https://github.com/luisguillermomolero/MisionTIC2022_2/blob/maste
 
 #definimos la función que recibirá dichos datos
 def listaPeliculas(rutaFileCsv: str) -> str:
+    #usamos [-1] pues despues de() tendriamos la lista y en último elemento la extensión, dejando así solo la extensión
+    #en el if para comparar que sea igual a 'csv?raw=true'
     if rutaFileCsv.split('.')[-1] == 'csv?raw=true':
         try:
             csv = pd.read_csv(rutaFileCsv)
-            subGrupoPeliculas = csv[['Country', 'Language', 'Gross Earnings']]
-            gananciaPaisLenguaje = subGrupoPeliculas.pivot_table(index=['Country', 'Language'])
-            return gananciaPaisLenguaje.head(10)
+            subGrupoPeliculas = csv[['Country', 'Language', 'Gross Earnings']] #Crea estos indices
+            gananciaPaisLenguaje = subGrupoPeliculas.pivot_table(index=['Country', 'Language']) #hacemos referencia a dos indices
+            return gananciaPaisLenguaje.head(10) #imprime primeras 10 medias de estos datos
     
         except:
             print('Error al leer el archivo de datos.')
