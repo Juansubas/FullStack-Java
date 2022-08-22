@@ -1,5 +1,5 @@
 //Empaquetando el directorio
-package miPrimerPirectorio;
+package miPrimerDirectorio;
 
 public class HolaMundo {
     public static void main(String[] args){

@@ -1,4 +1,4 @@
-package miPrimerPirectorio;
+package miPrimerDirectorio;
 import java.util.Scanner;
 
 public class ejercicio_cuatro {

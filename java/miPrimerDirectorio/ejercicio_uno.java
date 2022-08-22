@@ -1,4 +1,4 @@
-package miPrimerPirectorio;
+package miPrimerDirectorio;
 
 public class ejercicio_uno {
     

@@ -1,3 +1,4 @@
+
 //Las clases empiezan con 
 //throws Exception es el Try Except de python
 public class App {
@@ -69,8 +70,10 @@ public class App {
         nomina = objPersona5.calcular_nomina(10);
         System.out.println(apellido+" -- Nomina: " +nomina);
 
-
+        objPersona1.crear_carro();
 
     }
+
+    
 
 }
