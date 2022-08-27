@@ -7,7 +7,6 @@ import java.sql.Statement;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        conectar_bd();
     }
 
     public static Connection conectar_bd(){
@@ -29,34 +28,12 @@ public class App {
             //Connection conn = DriverManager.getConnection("jdbc:sqlite:hr.db");
             conn = DriverManager.getConnection("jdbc:sqlite:hr.db");
 
-            if(conn != null){
-                
-                } 
-
-            //iNICIALIZAR VARIABLES PARA EL QUERY
-            String job_title = "Developer";
-            int min_salary = 5000;
-            int max_salary = 10000;
-            //Estructura del QUERY
-            String query = "INSERT INTO jobs(job_title, min_salary, max_salary) VALUES(?, ?, ?)";
-            //Prepare la consulta
-            PreparedStatement ps = conn.prepareStatement(query);
-            //Setear los signos de interrogación / Indicar los valores que tendrá el query
-            ps.setString(1, job_title);
-            ps.setDouble( 2, min_salary);
-            ps.setDouble(3, max_salary);
-            
-            //Vamos a actualizar cuando no esperamos ningún retorno, pues estamos insertando valores
-            ps.executeUpdate();
-            //Execute Query es para cuando si esperamos un retorno
-
-            //Cerrar conexión
-            conn.close();
-
         }catch(SQLException error){
+            conn = null;
             error.printStackTrace();
             System.out.println(error.getMessage());
         }
+        return conn;
     }
 
     public static void mostrarEmpleados(Connection conn){
@@ -82,6 +59,40 @@ public class App {
                 System.out.println(info); 
             }
         } catch (SQLException error) {
+            System.out.println(error.getMessage());
+        }
+    }
+
+    public static void crearPuestoTrabajo(Connection conn){
+        try {
+                //iNICIALIZAR VARIABLES PARA EL QUERY
+                String job_title = "Developer";
+                int min_salary = 5000;
+                int max_salary = 10000;
+                //Estructura del QUERY
+                String query = "INSERT INTO jobs(job_title, min_salary, max_salary) VALUES(?, ?, ?)";
+                //Prepare la consulta
+                PreparedStatement ps = conn.prepareStatement(query);
+                //Setear los signos de interrogación / Indicar los valores que tendrá el query
+                ps.setString(1, job_title);
+                ps.setDouble( 2, min_salary);
+                ps.setDouble(3, max_salary);
+                
+                //Vamos a actualizar cuando no esperamos ningún retorno, pues estamos insertando valores
+                ps.executeUpdate();
+                //Execute Query es para cuando si esperamos un retorno
+        } catch (SQLException error) {
+            System.out.println(error.getMessage());
+        }
+    }
+
+    public static void mostarPuestosTrabajos(Connection conn){
+        try{
+            //Statement es cuando ya tenemos Querys Fijos
+            //PreparedStatement es para concatenar variables
+            //Como en este caso solo es la Query Usaremos Statement
+
+        }catch(SQLException error){
             System.out.println(error.getMessage());
         }
     }
