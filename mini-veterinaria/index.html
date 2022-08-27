@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <!-- Cabecera Documento -->
+    <head lang="es"> <!--Indicamos español-->
+        <meta charset="UTF-16"/> <!-- Indicamos teclado latino con ñ y tildes-->
+        <title>Veterinaria</title>
+        <!--Cargar hojas de estilos-->
+        <link rel="stylesheet" href="styles/index.css"/>
+    </head>
+    <body>
+        <header>
+            <h2>Registro de mascotas</h2>
+        </header>
+        <main>
+            <!--Creando un formulario-->
+            <form>
+                <!--Nombre propietario-->
+                <label for="nombre_mascota">Nombre Mascota: </label>
+                <input type="text" id="nombre_mascota"/>
+                <br/>
+                <!--Apellido propietario-->
+                <label for="apellido_propietario" >Apellido propietario: </label>
+                <input type="text" id="apellido_propietario"/>
+                <br/>
+                <!--Tipo Mascota-->
+                <label for="tipo_mascota" >Tipo mascota: </label>
+                <input type="text" id="tipo_mascota"/>
+                <br/>
+                <!--Raza-->
+                <label for="raza" >Raza: </label>edad
+                <input type="text" id="raza"/>
+                <br/>
+                <!--Edad de la mascota-->
+                <label for="edad" >Edad mascota: </label>
+                <input type="number" id="edad"/>
+                <br/>
+                <!--Observación-->
+                <label for="observación" >Observación: </label>
+                <br/>
+                <textarea  id="observación" rows="5" cols="50"></textarea>
+                <br/>
+                <button>Registrar</button>
+            </form>
+        </main>
+        <footer></footer>
+    </body>
+</html>
