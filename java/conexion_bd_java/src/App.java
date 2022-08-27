@@ -7,6 +7,14 @@ import java.sql.Statement;
 
 public class App {
     public static void main(String[] args) throws Exception {
+
+        Connection conn = conectar_bd();
+        mostrarEmpleados(conn);
+        //crearPuestoTrabajo(conn, "Marketing", 2000, 8000);
+        System.out.println("\n------------JOBS------------\n");
+        //eliminarPuestoTrabajoXid(conn, 17);
+        //updatePuestoTrabajo(conn, 16, "Industrial Engineering", 2000, 8000);
+        mostarPuestosTrabajos(conn);
     }
 
     public static Connection conectar_bd(){
@@ -63,12 +71,12 @@ public class App {
         }
     }
 
-    public static void crearPuestoTrabajo(Connection conn){
+    public static void crearPuestoTrabajo(Connection conn, String job_title, int min_salary, int max_salary){
         try {
-                //iNICIALIZAR VARIABLES PARA EL QUERY
-                String job_title = "Developer";
-                int min_salary = 5000;
-                int max_salary = 10000;
+                //ejemplo asignando valores -- iNICIALIZAR VARIABLES PARA EL QUERY
+                //Connection conn= "Developer";
+                //int min_salary= 5000;
+                //int max_salary = 10000;
                 //Estructura del QUERY
                 String query = "INSERT INTO jobs(job_title, min_salary, max_salary) VALUES(?, ?, ?)";
                 //Prepare la consulta
@@ -88,12 +96,47 @@ public class App {
 
     public static void mostarPuestosTrabajos(Connection conn){
         try{
+            Statement st = conn.createStatement();
+            ResultSet result = st.executeQuery("SELECT * FROM jobs");
+            while(result.next()){
+                System.out.println("Job Title: " + result.getString("job_title"));
+            }
             //Statement es cuando ya tenemos Querys Fijos
             //PreparedStatement es para concatenar variables
             //Como en este caso solo es la Query Usaremos Statement
 
         }catch(SQLException error){
             System.out.println(error.getMessage());
+        }
+    }
+    
+    //Método para eliminar un puesto de trabajo por id
+    public static void eliminarPuestoTrabajoXid(Connection conn, int id){
+        try {
+            String query = "DELETE FROM jobs WHERE job_id = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        //Desarrrollar este método, desde sus parámetros hasta su lógica
+    }
+
+    //Desarollar método par actualizar por id los valores de la tabla "jobs"
+    public static void updatePuestoTrabajo(Connection conn, int job_id, String job_title, int min_salary, int max_salary ){
+        try{
+            String query = "UPDATE jobs SET job_title = ?, min_salary = ?, max_salary = ? WHERE job_id= ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1,job_title);
+            ps.setDouble(2, min_salary);
+            ps.setDouble(3, max_salary);
+            ps.setInt(4, job_id);
+            ps.executeUpdate();
+
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
         }
     }
 }
