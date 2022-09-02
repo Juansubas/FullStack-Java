@@ -1,7 +1,8 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class ConexionDB {
     //ATTRIBUTES
@@ -13,12 +14,18 @@ public class ConexionDB {
     public ConexionDB(){
         //Generar Conexión
         try{
-            conexion = DriverManager.getConnection("jdbc:sqlite:universidad.db");
+            conexion = DriverManager.getConnection("jdbc:sqlite:universidad");
         }catch(SQLException e){
             System.out.println(e.getMessage());
             System.out.println("Eror al conectar con la base de datos");
         }
 
+    }
+
+    //CONSULTOR
+
+    public Connection getConexion(){
+        return conexion;
     }
 
     //METHODS
@@ -28,18 +35,21 @@ public class ConexionDB {
         conexion.close();
     }
 
-    public void consultar(){
-
-    }
-
-    public boolean insertar(String query){
-        boolean bandera = false;
+    public ResultSet consultar(String query){
+        ResultSet result;
         try {
-            PreparedStatement ps = conexion.prepareStatement(query);
-            bandera = true;
+            Statement st = conexion.createStatement();
+            result = st.executeQuery(query);
+            
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            result = null;
         }
-        return bandera;
+        return result;
     }
+
+    public void actualizar_eliminar(){
+
+    }
+
 }

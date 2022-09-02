@@ -24,4 +24,6 @@ public class Estudiante extends Persona{
         this.codigo = codigo;
     }
 
+
+
 }
