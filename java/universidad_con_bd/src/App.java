@@ -6,10 +6,19 @@ public class App {
         ConexionDB objConn = new ConexionDB();
         Universidad universidad_1 = new Universidad("UPB", "12345", "Cra 90 #55-85");
         universidad_1.setEmail("info@upb.edu.co");
-        universidad_1.queryInsert(objConn);
+        //universidad_1.queryInsert(objConn);
+        //universidad_1.crearFacultad("F0O1", "Desarrollo de software UTP misionTic", objConn);
+        universidad_1.cargarFacultades(objConn);
+        String infoFacultades = "----------FACULTADES------\n";
+        for (Facultad facultad : universidad_1.getFacultades()) {
+            infoFacultades += "\nCodigo: " + facultad.getCodigo();
+            infoFacultades += "\nNombre: " + facultad.getNombre();
+        }
+        System.out.println(infoFacultades);
 
         System.out.println("------ESTADO INICIAL--------");
         mostrar(objConn, universidad_1);
+        /*
         System.out.println("------UPDATE--------");
         universidad_1.setNombre("Nombre de Prueba");
         universidad_1.queryUpdate(objConn);
@@ -17,6 +26,7 @@ public class App {
         System.out.println("------DELETE--------");
         universidad_1.queryDelete(objConn);
         mostrar(objConn, universidad_1);
+        */
 
         //Cerrar Conexión
 

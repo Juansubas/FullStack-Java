@@ -1,4 +1,6 @@
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -51,6 +53,10 @@ public class Universidad{
         return email;
     }
 
+    public ArrayList<Facultad> getFacultades() {
+        return facultades;
+    }
+
     //MODIFICADORES
 
     public void setNombre(String nombre){
@@ -71,16 +77,41 @@ public class Universidad{
 
     //METHODS
 
+    public void cargarFacultades(ConexionDB objConn) {
+        // Eliminar todos los datos del array
+        facultades.clear();
+        try {
+            // Cargar toda la información de la BD
+            ResultSet result = Facultad.selectALL(objConn);
+            while (result.next()) {
+                String codigo = result.getString("codigo");
+                String nombre = result.getString("nombre");
+                // Adicionar facultad al arrayList
+                facultades.add(new Facultad(codigo, nombre));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    //---QUERIES---
     //Crear facultad
 
-    public void crearFacultad(String codigo, String nombre){
+    public void crearFacultad(String codigo, String nombre, ConexionDB objConn){
         //Al llamar esta función resulta que va a inicializar el constructor
         //de Facultad por eso se pone que esta variable es de Facultad
         //Posteriormente almacenamos el objeto en la variable que luego será añadida
         //al array
         Facultad facultad = new Facultad(codigo, nombre);
+        if(facultad.insert(objConn, nit)){
         //Añadir objeto al arreglo
         this.facultades.add(facultad);
+        System.out.println("Facultad Creada con exito");
+        }else{
+            System.out.println("Ups! sucedio un error");
+        }
+
     }
     //Matricular Estudiante
 
