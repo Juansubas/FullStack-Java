@@ -9,7 +9,7 @@ h2 {
 }
 
 #section-form {
-	display: flex;
+    display: flex;
 	justify-content: center;
 	padding-top: 50px;
 }
