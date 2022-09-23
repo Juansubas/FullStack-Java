@@ -1,6 +1,7 @@
 //Iniciamos el servidor con spring boot
 //Dejamos la dirección con la ruta .
 const URL_API = "http://localhost:8080/mascotas"
+let ID_MASCOTA = -1
 
 //con async indicamos que la función será asincrona 
 // con await indicamos que parte del código debera ser escuchado hasta que de respuesta
@@ -40,7 +41,7 @@ function show(mascotas) {
       <td>
         <button class="btn btn-warning" onclick='update(${JSON.stringify(obj)})'>Actualizar</button>
         &nbsp;
-        <button class="btn btn-danger">Eliminar</button>
+        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick='save_id(${obj.id})'>Eliminar</button>
       </td>
     </tr>
     `
@@ -48,6 +49,12 @@ function show(mascotas) {
 
   //Insertaremos en donde tenga id tbody el tr_body
   tbody.innerHTML = tr_body
+}
+
+//Acá dejamos al almacenado el id en una variable global
+//Y en el html llamamos delete mascota.
+function save_id (id) {
+  ID_MASCOTA = id
 }
 
 function update (mascota) {
@@ -59,6 +66,18 @@ function update (mascota) {
   //mejor pasamos todo el objeto
   window.location.href = `form.html?mascota=${JSON.stringify(mascota)}`
 }
+
+async function delete_mascota () {
+  // Enviar Peticion
+  const resp = await fetch (`${URL_API}/${ID_MASCOTA}`, {
+    method: 'DELETE'
+  })
+
+  const text = await resp.text()
+  //alert(text)
+  main()
+}
+
 
 async function main() {
   //guardamos las mascotas
