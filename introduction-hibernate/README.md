@@ -4,7 +4,7 @@
 
 - Mysql
 - Hibernate
-- Junit
+- JUnit
 
 ### Maven repositories
 

@@ -1,7 +1,5 @@
 public class Persona {
-
-    //ATTRIBUTES
-
+    //ATRIBUTOS
     private String nombre;
     private String apellido;
     private int edad;
@@ -10,8 +8,7 @@ public class Persona {
     private String[] numeroContacto;
 
     //CONSTRUCTOR
-
-    public Persona(String nombre, String apellido, int edad, String cedula, char sexo){
+    public Persona(String nombre, String apellido, int edad, String cedula, char sexo) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.edad = edad;
@@ -19,52 +16,60 @@ public class Persona {
         this.sexo = sexo;
     }
 
-    //GETTERS
-
-    public String getNombre(){
+    //CONSULTORES
+    public String getNombre() {
         return nombre;
     }
-    
-    public String getApellido(){
+
+
+    public String getApellido() {
         return apellido;
     }
-    
-    public int getEdad(){
+
+
+    public int getEdad() {
         return edad;
     }
-    
-    public String getcedula(){
+
+
+    public String getCedula() {
         return cedula;
     }
-    
-    public char getSexo(){
+
+
+    public char getSexo() {
         return sexo;
     }
 
-    public String[] getNumeroContacto(){
+
+    public String[] getNumeroContacto() {
         return numeroContacto;
     }
 
-    //SETTERS
-
+    //MODIFICADORES
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
 
     public void setApellido(String apellido) {
         this.apellido = apellido;
     }
 
+
     public void setEdad(int edad) {
         this.edad = edad;
     }
+    
 
     public void setSexo(char sexo) {
         this.sexo = sexo;
     }
 
+
     public void setNumeroContacto(String[] numeroContacto) {
         this.numeroContacto = numeroContacto;
-    }    
+    }
+
     
 }

@@ -5,51 +5,43 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-//Los arreglos nativos tienen tamaño dinámico por lo tanto vamos a importar libreria de arrays dinámicos
-
-public class Universidad{
-    //ATRIBUTOS
+public class Universidad {
+    // ATRIBUTOS
     private String nombre;
     private String nit;
     private String direccion;
     private String[] telefonos;
     private String email;
-    //Permite usar Arrays dinámicas
     private ArrayList<Facultad> facultades;
-    //Con map podemos tener estructura tipo diccionarios en python
-    //Con map podemos tener estructura tipo objetos en JavaScript
-    private Map<String, ArrayList<Estudiante>> estudiantes;
+    private Map<Integer, ArrayList<Estudiante>> matriculas;
 
-    //CONSTRUCTOR
-
-    public Universidad(String nombre, String nit, String direccion){
+    // CONSTRUCTOR
+    public Universidad(String nombre, String nit, String direccion) {
         this.nombre = nombre;
         this.nit = nit;
         this.direccion = direccion;
         this.facultades = new ArrayList<Facultad>();
-        //Inserta de forma ordenada las arrays.
-        this.estudiantes = new LinkedHashMap<String, ArrayList<Estudiante>>();
+        this.matriculas = new LinkedHashMap<Integer, ArrayList<Estudiante>>();
     }
 
-    //CONSULTORES
-
-    public String getNombre(){
+    // CONSULTORES
+    public String getNombre() {
         return nombre;
     }
 
-    public String getNit(){
+    public String getNit() {
         return nit;
     }
 
-    public String getDireccion(){
+    public String getDireccion() {
         return direccion;
     }
 
-    public String[] getTelefonos(){
+    public String[] getTelefonos() {
         return telefonos;
     }
 
-    public String getEmail(){
+    public String getEmail() {
         return email;
     }
 
@@ -57,84 +49,108 @@ public class Universidad{
         return facultades;
     }
 
-    //MODIFICADORES
+    public Map<Integer, ArrayList<Estudiante>> getMatriculas() {
+        return matriculas;
+    }
 
-    public void setNombre(String nombre){
+    // MODIFICADORES
+
+    public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
-    public void setDireccion(String direccion){
+    public void setDireccion(String direccion) {
         this.direccion = direccion;
     }
 
-    public void setTelefonos(String[] telefonos){
+    public void setTelefonos(String[] telefonos) {
         this.telefonos = telefonos;
     }
 
-    public void setEmail(String email){
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    //METHODS
-
+    // ACCIONES
     public void cargarFacultades(ConexionDB objConn) {
         // Eliminar todos los datos del array
         facultades.clear();
         try {
             // Cargar toda la información de la BD
-            ResultSet result = Facultad.selectALL(objConn);
+            ResultSet result = Facultad.selectByUniversidad(objConn, nit);
             while (result.next()) {
+                int id = result.getInt("id");
                 String codigo = result.getString("codigo");
                 String nombre = result.getString("nombre");
                 // Adicionar facultad al arrayList
-                facultades.add(new Facultad(codigo, nombre));
+                facultades.add(new Facultad(id, codigo, nombre));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    // -----QUERIES---------
 
-    //---QUERIES---
-    //Crear facultad
-
-    public void crearFacultad(String codigo, String nombre, ConexionDB objConn){
-        //Al llamar esta función resulta que va a inicializar el constructor
-        //de Facultad por eso se pone que esta variable es de Facultad
-        //Posteriormente almacenamos el objeto en la variable que luego será añadida
-        //al array
+    // Crear facultad
+    public void crearFacultad(String codigo, String nombre, ConexionDB objConn) {
         Facultad facultad = new Facultad(codigo, nombre);
-        if(facultad.insert(objConn, nit)){
-        //Añadir objeto al arreglo
-        this.facultades.add(facultad);
-        System.out.println("Facultad Creada con exito");
-        }else{
-            System.out.println("Ups! sucedio un error");
+        if (facultad.insert(objConn, nit)) {
+            // Añadir objeto al arreglo
+            this.facultades.add(facultad);
+            System.out.println("Facultad creada con exito");
+        } else {
+            System.out.println("Ups! sucedio un error, intenta mas tarde");
         }
 
     }
-    //Matricular Estudiante
 
-    public void matricularEstudiante(String codigoFacultad, String nombre, String apellido, int edad, String cedula, char sexo, String codigoEstudiante){
-        //Crear Objeto Estudiante
+    // Matricular estudiante
+    public void matricularEstudiante(int idFacultad, String nombre, String apellido, int edad, String cedula,
+            char sexo, String codigoEstudiante, ConexionDB objConn, boolean insertDb) {
+        // Crear objeto Estudiante
         Estudiante estudiante = new Estudiante(nombre, apellido, edad, cedula, sexo, codigoEstudiante);
-        // Validar si la facultad se encuentra en el map
-        if(estudiantes.containsKey(codigoFacultad)){
-            //Obtener el arrayList y añadir el nuevo obj
-            estudiantes.get(codigoFacultad).add(estudiante);
-        }else{
-            //Aquí primero creamos el array list que tenga todos los estudiante de una facultad
+        if (insertDb) {
+            estudiante.insert(objConn, idFacultad);
+        }
+        // Validar si la facultad se encuentra en el Map
+        if (matriculas.containsKey(idFacultad)) {
+            // Obtener el arrayList y añadir el nuevo objeto
+            matriculas.get(idFacultad).add(estudiante);
+        } else {
             ArrayList<Estudiante> arrayEstudiante = new ArrayList<Estudiante>();
-            //Despúes vamos a adicionar un estudiante a dicho array
             arrayEstudiante.add(estudiante);
-            //Posteriormente vamos a adicionar de una forma distinta y es con key y valor mediante put
-            estudiantes.put(codigoFacultad, arrayEstudiante);
+            matriculas.put(idFacultad, arrayEstudiante);
         }
     }
 
-    //Método que retorna query para la inserción de una universidad en BD
+    public void cargarMatriculas(ConexionDB objConn) {
+        if (facultades.size() == 0) {
+            cargarFacultades(objConn);
+        }
+        for (Facultad facultad : facultades) {
+            ResultSet estudiantes = Estudiante.selectByFacultad(objConn, facultad.getId());
+            try {
+                // Iterar estudinates
+                while (estudiantes.next()) {
+                    String nombre = estudiantes.getString("nombre");
+                    String apellido = estudiantes.getString("apellido");
+                    int edad = estudiantes.getInt("edad");
+                    String cedula = estudiantes.getString("cedula");
+                    char sexo = estudiantes.getString("sexo").charAt(0);
+                    String codigo = estudiantes.getString("codigo");
+                    matricularEstudiante(facultad.getId(), nombre, apellido, edad, cedula, sexo, codigo, objConn,
+                            false);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
-    public boolean queryInsert(ConexionDB objConn){
+    }
+
+    // Método que retorna query para la inserción de una universidad en BD
+    public boolean queryInsert(ConexionDB objConn) {
         boolean resp = false;
         String query = "INSERT INTO Universidades(nit, nombre, direccion, email) VALUES(?, ?, ?, ?)";
         try {
@@ -143,50 +159,52 @@ public class Universidad{
             pst.setString(2, nombre);
             pst.setString(3, direccion);
             pst.setString(4, email);
-            //Ejecutar Query
+            // Ejecutar query
             pst.executeUpdate();
             resp = true;
         } catch (Exception e) {
-            //Permite continuar con el programa pero además muestra lo que genera el error
             e.printStackTrace();
         }
+
         return resp;
     }
 
-    public String querySelectAll(){
+    public String querySelectAll() {
         String query = "SELECT * FROM Universidades";
         return query;
     }
 
-    public boolean queryUpdate(ConexionDB objConn){
+    public boolean queryUpdate(ConexionDB objConn) {
         boolean resp = false;
         try {
-            String query = "UPDATE Universidades SET nombre =?, direccion=?, email=?";
+            String query = "UPDATE Universidades SET nombre=?, direccion=?, email=?";
             PreparedStatement pst = objConn.getConexion().prepareStatement(query);
             pst.setString(1, nombre);
             pst.setString(2, direccion);
             pst.setString(3, email);
-            //Ejecutar Query
+            // Ejecutar query
             pst.executeUpdate();
             resp = true;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return resp;
-    } 
 
-    public boolean queryDelete(ConexionDB objConn){
-        boolean resp = false;
-        try {
-            String query = "DELETE FROM Universidades WHERE nit = ?";
-            PreparedStatement pst = objConn.getConexion().prepareStatement(query);
-            pst.setString(1, nit);
-            //Ejecutar Query
-            pst.executeUpdate();
-            resp = true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return resp;
     }
+
+    public boolean queryDelete(ConexionDB objConn) {
+        boolean resp = false;
+        try {
+            String query = "DELETE FROM Universidades WHERE nit=?";
+            PreparedStatement pst = objConn.getConexion().prepareStatement(query);
+            pst.setString(1, nit);
+            // Ejecutar query
+            pst.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return resp;
+    }
+
 }
